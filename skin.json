@@ -1,0 +1,33 @@
+{
+  "id": "claude",
+  "name": "Claude 深色",
+  "nameEn": "Claude Dark",
+  "author": "local",
+  "tagline": "Anthropic 官方色板 · 暖黑画布 · 陶橙点缀 · 字体可切换",
+  "description": "以 Claude 官方设计语言为蓝本的皮肤：采用 Anthropic 品牌色板（暖黑 #141413、陶橙 #d97757、暖白 #faf9f5），炭黑画布与深色侧边栏、大圆角输入框与细腻边框，全部通过 dsh 设计 token 重映射，跟随原生亮/暗主题。内置 Anthropic 字体模式（Sans UI / Serif 正文 / Mono 代码）。",
+  "tags": [
+    "claude",
+    "anthropic",
+    "dark",
+    "warm-black",
+    "clay",
+    "minimal"
+  ],
+  "accent": "#d97757",
+  "bodyAttr": "data-dsh-claude",
+  "package": "dsh-claude-skin",
+  "wiring": {
+    "id": "ui-skin-claude",
+    "bundleWired": false
+  },
+  "preview": {
+    "light": "preview/light.png",
+    "dark": "preview/dark.png"
+  },
+  "fontModes": [
+    "anthropic",
+    "skin",
+    "system"
+  ],
+  "order": 10
+}
