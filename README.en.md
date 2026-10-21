@@ -3,7 +3,7 @@
 > **A Claude-style skin for the DSH Web GUI**: warm-black canvas, clay accent, built-in Anthropic font modes, follows the native light/dark theme.  
 > Forked from [`PAKIKNOWLEDGE/dsh-client-ui-skin-claude`](https://github.com/PAKIKNOWLEDGE/dsh-client-ui-skin-claude) (MIT)
 
-**About this repository**: this is `xiang9916`'s personal fork. The package name and plugin identity are now `dsh-claude-skin`; the look and behaviour match upstream, serving as a base for further personal tweaks. The upstream version number and Git history have been cleared — history starts from a single initial commit at version `0.0.0`.
+**About this repository**: this is `xiang9916`'s personal fork. The package name and plugin identity are now `dsh-claude-skin`; the look and behaviour match upstream, serving as a base for further personal tweaks. The upstream Git history has been cleared — history starts from a single initial commit; the first release keeps upstream's version number `0.2.1`.
 
 ![Dark](docs/dark.png) · ![Light](docs/light.png)
 
@@ -60,7 +60,13 @@ I.Ming is ~25 MB (60,017 codepoints; covers Big5, GB2312 and the Table of Genera
 
 ## Install
 
-This personal fork is not published on npm yet; installing from source is recommended.
+Published on npm as `0.2.1` — the shortest path:
+
+```sh
+dsh plugin --profile web add dsh-claude-skin
+```
+
+Installing from source or a tgz also works:
 
 ### 1. Pack to a tgz, then install
 
@@ -68,8 +74,8 @@ From the repository root:
 
 ```sh
 npm pack
-# produces dsh-claude-skin-0.0.0.tgz
-dsh plugin --profile web add ./dsh-claude-skin-0.0.0.tgz
+# produces dsh-claude-skin-<version>.tgz
+dsh plugin --profile web add ./dsh-claude-skin-*.tgz
 dsh web
 ```
 

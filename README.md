@@ -3,7 +3,7 @@
 > **Claude 风格的 DSH Web 界面皮肤**：暖黑画布、陶橙点缀，内置 Anthropic 字体切换，跟随原生亮/暗主题。  
 > fork 自 [`PAKIKNOWLEDGE/dsh-client-ui-skin-claude`](https://github.com/PAKIKNOWLEDGE/dsh-client-ui-skin-claude)（MIT）
 
-**关于本仓库**：这是 `xiang9916` 的个人 fork，包名与插件身份已调整为 `dsh-claude-skin`，样式与功能与上游保持一致，方便作为自己的皮肤基底继续改造。本仓库已清空上游版本号与 Git 历史，从单一初始提交（版本 `0.0.0`）开始独立演进。
+**关于本仓库**：这是 `xiang9916` 的个人 fork，包名与插件身份已调整为 `dsh-claude-skin`，样式与功能与上游保持一致，方便作为自己的皮肤基底继续改造。本仓库已清空上游 Git 历史，从单一初始提交开始独立演进；首个发布版本号沿用上游的 `0.2.1`。
 
 ![暗色](docs/dark.png) · ![亮色](docs/light.png)
 
@@ -60,16 +60,22 @@ I.Ming 体积约 25 MB（60017 个码位，含 Big5、GB2312、《通用规范�
 
 ## 安装
 
-本仓库为个人 fork，尚未发布到 npm，推荐从源码本地安装：
+已发布到 npm（`0.2.1`），推荐直接安装：
 
-### 1. 打包为 tgz 后安装（通用）
+```sh
+dsh plugin --profile web add dsh-claude-skin
+```
+
+也可以从源码 / tgz 安装：
+
+### 1. 打包为 tgz 后安装
 
 在仓库根目录执行：
 
 ```sh
 npm pack
-# 生成 dsh-claude-skin-0.0.0.tgz
-dsh plugin --profile web add ./dsh-claude-skin-0.0.0.tgz
+# 生成 dsh-claude-skin-<version>.tgz
+dsh plugin --profile web add ./dsh-claude-skin-*.tgz
 dsh web
 ```
 
