@@ -25,7 +25,8 @@
     "README.en.md",
     "LICENSE",
     "docs",
-    "preview"
+    "preview",
+    "scripts"
   ],
   "license": "MIT",
   "repository": {

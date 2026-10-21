@@ -29,3 +29,10 @@ and `fonts/AnthropicMonoVariable.ttf` are proprietary typefaces of Anthropic,
 extracted from Anthropic's web products. They are included in this repository
 for personal use only and are **not** covered by the MIT license above; all
 rights remain with Anthropic. The npm package does not ship these files.
+
+I.Ming notice: `I.Ming` (一點明體 / 一点明朝体) by the I.Font Project is
+distributed under the IPA Font License Agreement v1.0, is **not** covered by the
+MIT license above, and is not bundled in this repository. `scripts/install-iming.sh`
+downloads the unmodified official release from
+https://github.com/ichitenfont/I.Ming and the skin only references its family
+name via CSS.

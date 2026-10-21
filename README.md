@@ -14,6 +14,7 @@
   - **Anthropic 原生（默认）**：UI 用 Anthropic Sans，对话正文用 Anthropic Serif，代码用 Anthropic Mono
   - **皮肤衬线**：保留原来的衬线 UI 风格
   - **系统默认**：不覆盖 DSH 字体
+- 中文正文自动落到 **I.Ming（一點明體）**，西文仍是 Anthropic Serif，中英混排各用其长
 - 细滚动条、陶橙选中 / 焦点、胶囊徽章
 - 亮 / 暗双主题，跟随系统切换
 
@@ -26,10 +27,36 @@
 | Anthropic Sans Web Text | 界面 / UI | [`fonts/AnthropicSansWebText.ttf`](fonts/AnthropicSansWebText.ttf) |
 | Anthropic Serif Web Text | 对话正文 / Markdown | [`fonts/AnthropicSerifWebText.ttf`](fonts/AnthropicSerifWebText.ttf) |
 | Anthropic Mono Variable | 代码 / 代码块 | [`fonts/AnthropicMonoVariable.ttf`](fonts/AnthropicMonoVariable.ttf) |
+| I.Ming（一點明體）8.10 | 中文正文 / 标题 / 表格 | 不随仓库分发，用 [`scripts/install-iming.sh`](scripts/install-iming.sh) 下载安装 |
 
 安装：Windows 双击 `.ttf` → 「安装」；macOS 用「字体册」导入。安装后刷新页面生效。
 
 > 字体版权归 Anthropic 所有，仅供个人使用，不适用 MIT 许可（详见 [LICENSE](LICENSE) 字体声明）。
+
+### 中文正文：一點明體（I.Ming）
+
+对话正文的衬线字族是这样排列的：
+
+```css
+--dsw-font-serif:
+  "Anthropic Serif Web Text", Georgia, "Times New Roman",
+  "I.Ming", "一點明體",          /* ← 中文落到这里 */
+  "Noto Serif SC", "Songti SC", serif;
+```
+
+Anthropic Serif 不含汉字，所以**西文用 Anthropic Serif、汉字用 I.Ming**，浏览器按字形逐个回退，无需拆段。`skin`（皮肤衬线）模式同样会落到 I.Ming。
+
+I.Ming 体积约 25 MB（60017 个码位，含 Big5、GB2312、《通用规范汉字表》），故**不提交进仓库**，改用脚本从官方 Release 下载并校验 SHA-256：
+
+```sh
+./scripts/install-iming.sh
+```
+
+- macOS → `~/Library/Fonts/I.Ming-8.10.ttf`；Linux → `~/.local/share/fonts/`（自动 `fc-cache`）
+- Windows：脚本只提示下载地址，双击 `.ttf` → 「安装」即可
+- 验证：macOS 里 `system_profiler SPFontsDataType | grep I.Ming` 应能查到
+
+> I.Ming 由一點字坊（I.Font Project）制作，采用 [IPA 开放字型授权协议 1.0](https://github.com/ichitenfont/I.Ming/blob/master/8.10/IPA_Font_License_Agreement_v1.0_chi.md)，**不适用 MIT**；本仓库只引用字体名、不分发字体文件。
 
 ## 安装
 
@@ -58,14 +85,14 @@ dsh web
 dsh plugin --profile web add github:xiang9916/dsh-claude-skin
 ```
 
-装完重启 `dsh web`，刷新页面。
+装完重启 `dsh web`，刷新页面。想要中文正文用一點明體，再执行一次 `./scripts/install-iming.sh`。
 
 ## 切换字体
 
 打开 **设置 → 常规 → 字体风格**：
 
-- **Anthropic 原生（默认）**：Sans UI / Serif 正文 / Mono 代码
-- **皮肤衬线**：Georgia 等衬线 UI
+- **Anthropic 原生（默认）**：Sans UI / Serif 正文（汉字 I.Ming）/ Mono 代码
+- **皮肤衬线**：Georgia 等衬线 UI，汉字同样用 I.Ming
 - **系统默认**：保持 DSH 默认字体
 
 选择立即生效，并保存在浏览器 localStorage。
@@ -93,4 +120,4 @@ dsh plugin --profile web add github:xiang9916/dsh-claude-skin
 
 ## 许可
 
-MIT。上游版权与作者署名保留在 [LICENSE](LICENSE) 中；字体文件版权归 Anthropic 所有。
+MIT。上游版权与作者署名保留在 [LICENSE](LICENSE) 中；Anthropic 字体版权归 Anthropic，I.Ming 采用 IPA 开放字型授权协议 1.0，均不适用 MIT。

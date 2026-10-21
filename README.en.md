@@ -14,6 +14,7 @@
   - **Anthropic native (default)**: Anthropic Sans for UI, Anthropic Serif for conversation, Anthropic Mono for code
   - **Skin serif**: keeps the original serif UI style
   - **System default**: leaves DSH fonts untouched
+- Chinese body text falls through to **I.Ming (一點明體)** while Latin stays Anthropic Serif — one run, two scripts
 - Slim scrollbars, clay selection/focus, pill badges
 - Light and dark variants that follow the system theme
 
@@ -26,10 +27,36 @@
 | Anthropic Sans Web Text | UI | [`fonts/AnthropicSansWebText.ttf`](fonts/AnthropicSansWebText.ttf) |
 | Anthropic Serif Web Text | Conversation / Markdown | [`fonts/AnthropicSerifWebText.ttf`](fonts/AnthropicSerifWebText.ttf) |
 | Anthropic Mono Variable | Code / code blocks | [`fonts/AnthropicMonoVariable.ttf`](fonts/AnthropicMonoVariable.ttf) |
+| I.Ming (一點明體) 8.10 | Chinese body / headings / tables | Not bundled; fetched by [`scripts/install-iming.sh`](scripts/install-iming.sh) |
 
 Install: on Windows double-click each `.ttf` → **Install**; on macOS import with Font Book. Refresh the page afterwards.
 
 > The Anthropic fonts are proprietary to Anthropic and are provided for personal use only. They are **not** covered by the MIT license (see the font notice in [LICENSE](LICENSE)).
+
+### Chinese body text: I.Ming
+
+The conversation serif stack is ordered like this:
+
+```css
+--dsw-font-serif:
+  "Anthropic Serif Web Text", Georgia, "Times New Roman",
+  "I.Ming", "一點明體",          /* ← CJK lands here */
+  "Noto Serif SC", "Songti SC", serif;
+```
+
+Anthropic Serif has no Han glyphs, so **Latin uses Anthropic Serif and Chinese uses I.Ming** — the browser falls back per glyph, no markup changes needed. The `skin` (serif UI) mode resolves to I.Ming as well.
+
+I.Ming is ~25 MB (60,017 codepoints; covers Big5, GB2312 and the Table of General Standard Chinese Characters), so it is **not committed** to this repository. The script downloads it from the official release and verifies its SHA-256:
+
+```sh
+./scripts/install-iming.sh
+```
+
+- macOS → `~/Library/Fonts/I.Ming-8.10.ttf`; Linux → `~/.local/share/fonts/` (runs `fc-cache`)
+- Windows: the script prints the download URL; double-click the `.ttf` → **Install**
+- Verify on macOS: `system_profiler SPFontsDataType | grep I.Ming`
+
+> I.Ming is made by the I.Font Project and licensed under the [IPA Font License 1.0](https://github.com/ichitenfont/I.Ming/blob/master/8.10/IPA_Font_License_Agreement_v1.0.md), **not** MIT. This repository only references the family name and does not redistribute the font.
 
 ## Install
 
@@ -58,14 +85,14 @@ Open **Settings → Plugins** and paste the tgz absolute path into the install f
 dsh plugin --profile web add github:xiang9916/dsh-claude-skin
 ```
 
-Restart `dsh web`, then refresh the page.
+Restart `dsh web`, then refresh the page. For Chinese body text in I.Ming, also run `./scripts/install-iming.sh`.
 
 ## Switching fonts
 
 Open **Settings → General → Font style**:
 
-- **Anthropic native (default)**: Sans UI / Serif body / Mono code
-- **Skin serif**: Georgia-style serif UI
+- **Anthropic native (default)**: Sans UI / Serif body (I.Ming for Chinese) / Mono code
+- **Skin serif**: Georgia-style serif UI, I.Ming for Chinese
 - **System default**: keep DSH's default fonts
 
 The selection applies instantly and is saved in browser localStorage.
@@ -93,4 +120,4 @@ Only one skin is active at a time. Edit `~/.dsh/cordis.patch.yml`:
 
 ## License
 
-MIT. Upstream copyright and author credits are retained in [LICENSE](LICENSE); the font files remain copyright Anthropic.
+MIT. Upstream copyright and author credits are retained in [LICENSE](LICENSE); the Anthropic fonts remain copyright Anthropic and I.Ming is under the IPA Font License 1.0 — neither is covered by MIT.
