@@ -14,6 +14,7 @@
   - **Anthropic 原生（默认）**：UI 用 Anthropic Sans，对话正文用 Anthropic Serif，代码用 Anthropic Mono
   - **皮肤衬线**：保留原来的衬线 UI 风格
   - **系统默认**：不覆盖 DSH 字体
+- 字体设置位于侧栏 **插件** → **Claude 风味主题** 页面，不再占用 设置 → 常规
 - 中文正文自动落到 **I.Ming（一點明體）**（含新对话空态的「探索未至之境」标题与「预览版」徽章），西文仍是 Anthropic Serif，中英混排各用其长
 - 正文链接、文件 / 命令 / 技能引用、文件类型图标（含计划卡 MD 图标）与「深度求索中」状态统一为陶橙
 - 代码块、行内代码、菜单等冷灰面暖色化；语法高亮使用 Claude 语法色（陶橙 / 橄榄 / 琥珀 / 薰衣草）
@@ -88,7 +89,7 @@ dsh web
 
 ### 2. DSH Desktop 桌面端
 
-打开 **设置 → 插件**，把上面生成的 tgz 绝对路径粘贴到安装输入框即可。
+打开侧栏的 **插件** 面板，点 **添加插件**，把上面生成的 tgz 绝对路径粘贴到安装输入框即可（旧版 DSH 在 设置 → 插件）。
 
 ### 3. 从 GitHub 安装（推送本仓库后可用）
 
@@ -98,23 +99,23 @@ dsh plugin --profile web add github:xiang9916/dsh-claude-skin
 
 装完重启 `dsh web`，刷新页面。
 
-> **插件列表显示名与图标**：安装后在「设置 → 插件」里显示为 **「Claude 风味主题」**，图标是陶土橙鲸鱼。名称来自 [`locale/zh.json`](locale/zh.json) 的 `meta.title`，英文环境显示 `Claude Flavour Theme`；图标由 [`package.json`](package.json) 的 `"icon": "./icon.svg"` 指向 [`icon.svg`](icon.svg)。
+> **插件列表显示名与图标**：安装后在插件页的「已安装插件」里显示为 **「Claude 风味主题」**，图标是陶土橙鲸鱼。名称来自 [`locale/zh.json`](locale/zh.json) 的 `meta.title`，英文环境显示 `Claude Flavour Theme`；图标由 [`package.json`](package.json) 的 `"icon": "./icon.svg"` 指向 [`icon.svg`](icon.svg)。
 
 > **装完看不到 Anthropic 字体是正常的**：npm 包不随包分发字体，需要手动导入 [`fonts/`](fonts/) 里的三个 TTF；想让中文正文用一點明體，再执行一次 `./scripts/install-iming.sh`。
 
 ## 兼容性
 
-已在 **DSH 0.2.1-rc.2** 上运行验证，并针对 **DSH 0.2.1-rc.3** 逐项核对（客户端组件类名后缀、`settings.general.item` 插槽、primitives / store 导出在 rc.3 中均未变化，只有图标的导出名从 `IconChevronDownOutline14` 改为 `IconChevronDownOutlineRegular`，本版已跟随）。`package.json` 通过 `engines.dsh` 与 `dsh.compatibility.dshReleases` 声明兼容范围，Market / 插件列表可直接判断，不会显示 unknown。
+已在 **DSH 0.2.1-rc.2** 上运行验证，并针对 **DSH 0.2.1-rc.3** 逐项核对（客户端组件类名后缀、`plugins.bundle.config` 插件页配置插槽、primitives / store 导出在 rc.3 中均未变化，只有图标的导出名从 `IconChevronDownOutline14` 改为 `IconChevronDownOutlineRegular`，本版已跟随）。`package.json` 通过 `engines.dsh` 与 `dsh.compatibility.dshReleases` 声明兼容范围，Market / 插件列表可直接判断，不会显示 unknown。
 
 ## 切换字体
 
-打开 **设置 → 常规 → 字体风格**：
+打开侧栏 **插件** → 已安装插件 → **Claude 风味主题**，在配置区找到 **字体风格**：
 
 - **Anthropic 原生（默认）**：Sans UI / Serif 正文（汉字 I.Ming）/ Mono 代码
 - **皮肤衬线**：Georgia 等衬线 UI，汉字同样用 I.Ming
 - **系统默认**：保持 DSH 默认字体
 
-选择立即生效，并保存在浏览器 localStorage。
+选择立即生效，并保存在浏览器 localStorage。设置 → 常规 不再显示这一行。
 
 > 如果之前单独安装过 `dsh-anthropic-fonts`，建议先卸载，避免两套字体变量互相覆盖。
 

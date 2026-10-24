@@ -14,6 +14,7 @@
   - **Anthropic native (default)**: Anthropic Sans for UI, Anthropic Serif for conversation, Anthropic Mono for code
   - **Skin serif**: keeps the original serif UI style
   - **System default**: leaves DSH fonts untouched
+- Font settings live on the **Claude Flavour Theme** page in the sidebar's **Plugins** panel, not in Settings → General
 - Chinese body text falls through to **I.Ming (一點明體)** — including the new-session hero headline and its preview badge — while Latin stays Anthropic Serif: one run, two scripts
 - Markdown links, file/command/skill references, file-type icons (including the plan card's MD glyph) and the "Deep diving" status render in clay
 - Code blocks, inline code and menus are warmed up; syntax highlighting uses a Claude palette (clay, olive, amber, lavender)
@@ -88,7 +89,7 @@ dsh web
 
 ### 2. DSH Desktop
 
-Open **Settings → Plugins** and paste the tgz absolute path into the install field.
+Open the **Plugins** panel in the sidebar, choose **Add plugin**, and paste the tgz absolute path into the install field (older DSH builds keep this under Settings → Plugins).
 
 ### 3. From GitHub (available after this repository is pushed)
 
@@ -98,23 +99,23 @@ dsh plugin --profile web add github:xiang9916/dsh-claude-skin
 
 Restart `dsh web`, then refresh the page.
 
-> **Plugin list name and icon**: the plugin appears as **“Claude Flavour Theme”** (中文环境显示「Claude 风味主题」) with a terracotta whale icon. The title comes from `meta.title` in [`locale/en.json`](locale/en.json) / [`locale/zh.json`](locale/zh.json); the icon is declared by `"icon": "./icon.svg"` in [`package.json`](package.json).
+> **Plugin list name and icon**: the plugin appears in the Plugins page's Installed list as **“Claude Flavour Theme”** (中文环境显示「Claude 风味主题」) with a terracotta whale icon. The title comes from `meta.title` in [`locale/en.json`](locale/en.json) / [`locale/zh.json`](locale/zh.json); the icon is declared by `"icon": "./icon.svg"` in [`package.json`](package.json).
 
 > **Seeing no Anthropic fonts after install is expected**: the npm package does not ship font files. Import the three TTFs from [`fonts/`](fonts/) manually; for Chinese body text in I.Ming, also run `./scripts/install-iming.sh`.
 
 ## Compatibility
 
-Verified at runtime on **DSH 0.2.1-rc.2**, and audited component by component against **DSH 0.2.1-rc.3** (client class suffixes, the `settings.general.item` slot, and the primitives / store exports are unchanged in rc.3; the only drift is the chevron icon export, renamed from `IconChevronDownOutline14` to `IconChevronDownOutlineRegular`, which this release follows). `package.json` declares the range through `engines.dsh` and `dsh.compatibility.dshReleases`, so Market / plugin lists can resolve compatibility instead of reporting unknown.
+Verified at runtime on **DSH 0.2.1-rc.2**, and audited component by component against **DSH 0.2.1-rc.3** (client class suffixes, the `plugins.bundle.config` configuration slot on the Plugins page, and the primitives / store exports are unchanged in rc.3; the only drift is the chevron icon export, renamed from `IconChevronDownOutline14` to `IconChevronDownOutlineRegular`, which this release follows). `package.json` declares the range through `engines.dsh` and `dsh.compatibility.dshReleases`, so Market / plugin lists can resolve compatibility instead of reporting unknown.
 
 ## Switching fonts
 
-Open **Settings → General → Font style**:
+Open the sidebar's **Plugins** panel → Installed plugins → **Claude Flavour Theme**, then find **Font style** in its configuration section:
 
 - **Anthropic native (default)**: Sans UI / Serif body (I.Ming for Chinese) / Mono code
 - **Skin serif**: Georgia-style serif UI, I.Ming for Chinese
 - **System default**: keep DSH's default fonts
 
-The selection applies instantly and is saved in browser localStorage.
+The selection applies instantly and is saved in browser localStorage. Settings → General no longer shows this row.
 
 > If you previously installed `dsh-anthropic-fonts` separately, remove it first to avoid two font overrides fighting each other.
 
