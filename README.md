@@ -14,7 +14,9 @@
   - **Anthropic 原生（默认）**：UI 用 Anthropic Sans，对话正文用 Anthropic Serif，代码用 Anthropic Mono
   - **皮肤衬线**：保留原来的衬线 UI 风格
   - **系统默认**：不覆盖 DSH 字体
-- 中文正文自动落到 **I.Ming（一點明體）**，西文仍是 Anthropic Serif，中英混排各用其长
+- 中文正文自动落到 **I.Ming（一點明體）**（含新对话空态的「探索未至之境」标题与「预览版」徽章），西文仍是 Anthropic Serif，中英混排各用其长
+- 正文链接、文件 / 命令 / 技能引用、文件类型图标（含计划卡 MD 图标）与「深度求索中」状态统一为陶橙
+- 代码块、行内代码、菜单等冷灰面暖色化；语法高亮使用 Claude 语法色（陶橙 / 橄榄 / 琥珀 / 薰衣草）
 - 细滚动条、陶橙选中 / 焦点、胶囊徽章
 - 亮 / 暗双主题，跟随系统切换
 
@@ -27,7 +29,7 @@
 | Anthropic Sans Web Text | 界面 / UI | [`fonts/AnthropicSansWebText.ttf`](fonts/AnthropicSansWebText.ttf) |
 | Anthropic Serif Web Text | 对话正文 / Markdown | [`fonts/AnthropicSerifWebText.ttf`](fonts/AnthropicSerifWebText.ttf) |
 | Anthropic Mono Variable | 代码 / 代码块 | [`fonts/AnthropicMonoVariable.ttf`](fonts/AnthropicMonoVariable.ttf) |
-| I.Ming（一點明體）8.10 | 中文正文 / 标题 / 表格 | 不随仓库分发，用 [`scripts/install-iming.sh`](scripts/install-iming.sh) 下载安装 |
+| I.Ming（一點明體）8.10 | 中文正文 / 标题 / 表格 / 新对话空态标题与「预览版」徽章 | 不随仓库分发，用 [`scripts/install-iming.sh`](scripts/install-iming.sh) 下载安装 |
 
 安装：Windows 双击 `.ttf` → 「安装」；macOS 用「字体册」导入。安装后刷新页面生效。
 
@@ -46,6 +48,8 @@
 
 Anthropic Serif 不含汉字，所以**西文用 Anthropic Serif、汉字用 I.Ming**，浏览器按字形逐个回退，无需拆段。`skin`（皮肤衬线）模式同样会落到 I.Ming。
 
+新对话空态的两处文字原本到不了 I.Ming：「探索未至之境」大标题继承的是 UI 无衬线字族，「预览版」徽章则被应用钉在等宽字族。皮肤用一条规则把两者指回 `--dsw-font-serif`，因此 anthropic / skin 模式下它们与正文一样是明体；「系统默认」模式则保持不干预字体。这两处同时按 `font-weight: 700` 加粗，明体只有常规字重，粗体由浏览器合成。
+
 I.Ming 体积约 25 MB（60017 个码位，含 Big5、GB2312、《通用规范汉字表》），故**不提交进仓库**，改用脚本从官方 Release 下载并校验 SHA-256：
 
 ```sh
@@ -60,10 +64,11 @@ I.Ming 体积约 25 MB（60017 个码位，含 Big5、GB2312、《通用规范�
 
 ## 安装
 
-已发布到 npm（`0.2.1`），推荐直接安装：
+已发布到 npm：[`0.2.1`](https://www.npmjs.com/package/dsh-claude-skin) 对应 DSH 0.2.1-rc.2；对应 **DSH 0.2.1-rc.3** 的是预发布版 `0.2.1-rc.3`（dist-tag `next`）。推荐直接安装：
 
 ```sh
-dsh plugin --profile web add dsh-claude-skin
+dsh plugin --profile web add dsh-claude-skin         # 0.2.1
+dsh plugin --profile web add dsh-claude-skin@next    # 0.2.1-rc.3，适配 DSH 0.2.1-rc.3
 ```
 
 也可以从源码 / tgz 安装：
@@ -91,7 +96,15 @@ dsh web
 dsh plugin --profile web add github:xiang9916/dsh-claude-skin
 ```
 
-装完重启 `dsh web`，刷新页面。想要中文正文用一點明體，再执行一次 `./scripts/install-iming.sh`。
+装完重启 `dsh web`，刷新页面。
+
+> **插件列表显示名与图标**：安装后在「设置 → 插件」里显示为 **「Claude 风味主题」**，图标是陶土橙鲸鱼。名称来自 [`locale/zh.json`](locale/zh.json) 的 `meta.title`，英文环境显示 `Claude Flavour Theme`；图标由 [`package.json`](package.json) 的 `"icon": "./icon.svg"` 指向 [`icon.svg`](icon.svg)。
+
+> **装完看不到 Anthropic 字体是正常的**：npm 包不随包分发字体，需要手动导入 [`fonts/`](fonts/) 里的三个 TTF；想让中文正文用一點明體，再执行一次 `./scripts/install-iming.sh`。
+
+## 兼容性
+
+已在 **DSH 0.2.1-rc.2** 上运行验证，并针对 **DSH 0.2.1-rc.3** 逐项核对（客户端组件类名后缀、`settings.general.item` 插槽、primitives / store 导出在 rc.3 中均未变化，只有图标的导出名从 `IconChevronDownOutline14` 改为 `IconChevronDownOutlineRegular`，本版已跟随）。`package.json` 通过 `engines.dsh` 与 `dsh.compatibility.dshReleases` 声明兼容范围，Market / 插件列表可直接判断，不会显示 unknown。
 
 ## 切换字体
 
@@ -107,12 +120,14 @@ dsh plugin --profile web add github:xiang9916/dsh-claude-skin
 
 ## 切换皮肤
 
-同一时刻只启用一个皮肤。编辑 `~/.dsh/cordis.patch.yml`：
+同一时刻只启用一个皮肤。本 fork 使用独立的 loader 行 id **`ui-claude-skin`**（上游是 `ui-skin-claude`），`skin.json` 的皮肤 id 也改为 `claude-skin`，因此不会与上游包发生 loader id 冲突；但两个皮肤都会写入同一个 `data-dsh-claude` 作用域并各自注入一份 `<style>`，**不要同时启用**，否则后加载的会覆盖前一个的样式。
+
+编辑 `~/.dsh/cordis.patch.yml`：
 
 ```yaml
 # dsh-skin managed 段之外
 - insert:
-    - id: ui-skin-claude
+    - id: ui-claude-skin
       name: 'dsh-claude-skin'
 ```
 
@@ -120,7 +135,7 @@ dsh plugin --profile web add github:xiang9916/dsh-claude-skin
 
 ## 卸载
 
-1. 删除 `~/.dsh/cordis.patch.yml` 里的 `ui-skin-claude` insert 行
+1. 删除 `~/.dsh/cordis.patch.yml` 里的 `ui-claude-skin` insert 行
 2. `dsh plugin --profile web remove dsh-claude-skin`
 3. 重启 `dsh web`
 

@@ -17,7 +17,7 @@ tmpdir="$(mktemp -d)"
 trap 'rm -rf "$tmpdir"' EXIT
 
 echo "==> downloading I.Ming ${VERSION}"
-curl -fL --progress-bar -o "${tmpdir}/${FILE}" "${URL}"
+curl -fL --http1.1 --retry 3 --progress-bar -o "${tmpdir}/${FILE}" "${URL}"
 
 if command -v shasum >/dev/null 2>&1; then
   actual="$(shasum -a 256 "${tmpdir}/${FILE}" | awk '{print $1}')"
