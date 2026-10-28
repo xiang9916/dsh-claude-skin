@@ -65,11 +65,11 @@ I.Ming is ~25 MB (60,017 codepoints; covers Big5, GB2312 and the Table of Genera
 
 ## Install
 
-Published on npm: [`0.2.1`](https://www.npmjs.com/package/dsh-claude-skin) targets DSH 0.2.1-rc.2; the prerelease for **DSH 0.2.1-rc.3** is `0.2.1-rc.3` (dist-tag `next`). The shortest path:
+Published on npm: the stable [`0.2.1`](https://www.npmjs.com/package/dsh-claude-skin) targets DSH 0.2.1-rc.2; the prerelease `0.2.1-rc.4` (dist-tag `next`) supports **DSH 0.2.1-rc.2 / rc.3 / rc.4 and 0.2.2-alpha.2** and moves the font setting onto the Plugins page. The shortest path:
 
 ```sh
-dsh plugin --profile web add dsh-claude-skin         # 0.2.1
-dsh plugin --profile web add dsh-claude-skin@next    # 0.2.1-rc.3, for DSH 0.2.1-rc.3
+dsh plugin --profile web add dsh-claude-skin         # 0.2.1 (old font-setting location)
+dsh plugin --profile web add dsh-claude-skin@next    # 0.2.1-rc.4, for 0.2.1-rc.4 / 0.2.2-alpha.2
 ```
 
 Installing from source or a tgz also works:
@@ -105,7 +105,13 @@ Restart `dsh web`, then refresh the page.
 
 ## Compatibility
 
-Verified at runtime on **DSH 0.2.1-rc.2**, and audited component by component against **DSH 0.2.1-rc.3** (client class suffixes, the `plugins.bundle.config` configuration slot on the Plugins page, and the primitives / store exports are unchanged in rc.3; the only drift is the chevron icon export, renamed from `IconChevronDownOutline14` to `IconChevronDownOutlineRegular`, which this release follows). `package.json` declares the range through `engines.dsh` and `dsh.compatibility.dshReleases`, so Market / plugin lists can resolve compatibility instead of reporting unknown.
+| Plugin version | DSH versions | Notes |
+| --- | --- | --- |
+| `0.2.1` | 0.2.1-rc.2 | font setting lives in Settings → General |
+| `0.2.1-rc.3` | 0.2.1-rc.3 | font setting moved to the Plugins panel |
+| `0.2.1-rc.4` (`next`) | 0.2.1-rc.2 / rc.3 / rc.4 / 0.2.2-alpha.2 | current release |
+
+How it was audited: the client slot contract (`plugins.bundle.config` keyed registration, `view: 'page'`, ledger lookup by npm package name), the module table (`react`, `react/jsx-runtime`, `@deepseek-ai/dsh-client-store`, `@deepseek-ai/dsh-client-ui-primitives`), the `dsh.client.platform === 'web'` manifest check, the handwritten `window.__ModuleLoader__.load({id, factory})` bundle format, the `data-ds-dark-theme` / `data-slot` / `data-plugin-config` DOM anchors and every class name the skin targets, plus the theme tokens: rc.4's token set matches rc.3 exactly, and alpha.2 only drops the unused `--dsw-specific-sidebar-nav-item-hover` and adds the `--dsw-alias-illustration-*` family (remapped to warm neutrals here). `package.json` declares the range through `engines.dsh` (the host compares with `includePrerelease`) and `dsh.compatibility.dshReleases`.
 
 ## Switching fonts
 

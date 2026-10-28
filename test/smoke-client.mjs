@@ -7,7 +7,7 @@
  * Run: npm test   (or: node test/smoke-client.mjs)
  */
 import assert from 'node:assert/strict'
-import { readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -141,6 +141,12 @@ assert.equal(document.title, 'Claude · DeepSeek Harness')
 const style = document.getElementById('dsh-skin-claude-style')
 assert.ok(style, 'the skin injects its stylesheet')
 assert.ok(style.textContent.includes('[data-plugin-config] .dsh-skin-font-row'))
+/* dsh 0.2.2-alpha.2 illustration aliases: rewritten once per colour scheme */
+assert.equal(
+  style.textContent.split('--dsw-alias-illustration-surface:').length - 1,
+  2,
+  'both the light and the dark palette warm the illustration aliases'
+)
 
 /* ------------------------------------------------------ slot registration */
 
@@ -198,4 +204,25 @@ assert.equal(document.body.getAttribute('data-dsh-font'), null)
 assert.equal(document.getElementById('dsh-skin-claude-style'), null)
 assert.equal(document.title, 'DSH')
 
-console.log('smoke-client: ok — Plugins page slot, font modes and teardown all behave')
+/* ------------------------------------------------------------- the manifest */
+
+const manifest = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'))
+assert.equal(manifest.dsh.client.platform, 'web', 'the client row declares the web platform')
+assert.equal(manifest.exports['./client'], './lib/client.js')
+assert.ok(existsSync(join(root, 'lib/client.js')), 'the client bundle export exists')
+assert.ok(existsSync(join(root, manifest.dsh.bundle.patch)), 'the bundle patch exists')
+assert.ok(manifest.files.includes('lib'), 'the npm tarball ships lib/')
+assert.equal(
+  manifest.dsh.compatibility.dsh,
+  manifest.engines.dsh,
+  'the advisory and enforced dsh ranges agree'
+)
+for (const release of ['0.2.1-rc.2', '0.2.1-rc.3', '0.2.1-rc.4', '0.2.2-alpha.2']) {
+  assert.equal(
+    manifest.dsh.compatibility.dshReleases[release],
+    'compatible',
+    `${release} is declared compatible`
+  )
+}
+
+console.log('smoke-client: ok — Plugins page slot, font modes, teardown and manifest all behave')
