@@ -1,7 +1,7 @@
 {
   "name": "dsh-claude-skin",
   "description": "Claude 风格 DSH Web 界面皮肤（fork 自 @pakiknowledge/dsh-client-ui-skin-claude）：暖黑画布、陶橙点缀、Anthropic 字体模式、跟随原生亮/暗主题",
-  "version": "0.2.1-rc.4",
+  "version": "0.2.1-rc.5",
   "type": "module",
   "main": "lib/index.js",
   "icon": "./icon.svg",
@@ -28,6 +28,7 @@
         "0.2.1-rc.2": "compatible",
         "0.2.1-rc.3": "compatible",
         "0.2.1-rc.4": "compatible",
+        "0.2.1-rc.5": "compatible",
         "0.2.2-alpha.2": "compatible"
       }
     }

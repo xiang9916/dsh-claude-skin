@@ -65,11 +65,11 @@ I.Ming is ~25 MB (60,017 codepoints; covers Big5, GB2312 and the Table of Genera
 
 ## Install
 
-Published on npm: the stable [`0.2.1`](https://www.npmjs.com/package/dsh-claude-skin) targets DSH 0.2.1-rc.2; the prerelease `0.2.1-rc.4` (dist-tag `next`) supports **DSH 0.2.1-rc.2 / rc.3 / rc.4 and 0.2.2-alpha.2** and moves the font setting onto the Plugins page. The shortest path:
+Published on npm: the stable [`0.2.1`](https://www.npmjs.com/package/dsh-claude-skin) targets DSH 0.2.1-rc.2; the prerelease `0.2.1-rc.5` (dist-tag `next`) supports **DSH 0.2.1-rc.2 / rc.3 / rc.4 / rc.5 and 0.2.2-alpha.2** and moves the font setting onto the Plugins page. The shortest path:
 
 ```sh
 dsh plugin --profile web add dsh-claude-skin         # 0.2.1 (old font-setting location)
-dsh plugin --profile web add dsh-claude-skin@next    # 0.2.1-rc.4, for 0.2.1-rc.4 / 0.2.2-alpha.2
+dsh plugin --profile web add dsh-claude-skin@next    # 0.2.1-rc.5, for 0.2.1-rc.5 / 0.2.2-alpha.2
 ```
 
 Installing from source or a tgz also works:
@@ -109,9 +109,10 @@ Restart `dsh web`, then refresh the page.
 | --- | --- | --- |
 | `0.2.1` | 0.2.1-rc.2 | font setting lives in Settings → General |
 | `0.2.1-rc.3` | 0.2.1-rc.3 | font setting moved to the Plugins panel |
-| `0.2.1-rc.4` (`next`) | 0.2.1-rc.2 / rc.3 / rc.4 / 0.2.2-alpha.2 | current release |
+| `0.2.1-rc.4` | 0.2.1-rc.2 / rc.3 / rc.4 / 0.2.2-alpha.2 | previous release |
+| `0.2.1-rc.5` (`next`) | 0.2.1-rc.2 / rc.3 / rc.4 / rc.5 / 0.2.2-alpha.2 | current release |
 
-How it was audited: the client slot contract (`plugins.bundle.config` keyed registration, `view: 'page'`, ledger lookup by npm package name), the module table (`react`, `react/jsx-runtime`, `@deepseek-ai/dsh-client-store`, `@deepseek-ai/dsh-client-ui-primitives`), the `dsh.client.platform === 'web'` manifest check, the handwritten `window.__ModuleLoader__.load({id, factory})` bundle format, the `data-ds-dark-theme` / `data-slot` / `data-plugin-config` DOM anchors and every class name the skin targets, plus the theme tokens: rc.4's token set matches rc.3 exactly, and alpha.2 only drops the unused `--dsw-specific-sidebar-nav-item-hover` and adds the `--dsw-alias-illustration-*` family (remapped to warm neutrals here). `package.json` declares the range through `engines.dsh` (the host compares with `includePrerelease`) and `dsh.compatibility.dshReleases`.
+How it was audited: the client slot contract (`plugins.bundle.config` keyed registration, `view: 'page'`, ledger lookup by npm package name), the module table (`react`, `react/jsx-runtime`, `@deepseek-ai/dsh-client-store`, `@deepseek-ai/dsh-client-ui-primitives`), the `dsh.client.platform === 'web'` manifest check, the handwritten `window.__ModuleLoader__.load({id, factory})` bundle format, the `data-ds-dark-theme` / `data-slot` / `data-plugin-config` DOM anchors and every class name the skin targets, plus the theme tokens: rc.5's five client packages (theme / slots / plugin-manager / primitives / store) are byte-identical to rc.4 apart from the version field. The one client-side contract change in rc.5 is `conversation.chat.reasoning.body` gaining `rawText` while `text` becomes the display-processed string; this skin does not register that slot and writes no reasoning styles, so nothing had to change. alpha.2 only drops the unused `--dsw-specific-sidebar-nav-item-hover` and adds the `--dsw-alias-illustration-*` family (remapped to warm neutrals here). `package.json` declares the range through `engines.dsh` (the host compares with `includePrerelease`) and `dsh.compatibility.dshReleases`.
 
 ## Switching fonts
 

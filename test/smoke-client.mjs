@@ -217,7 +217,7 @@ assert.equal(
   manifest.engines.dsh,
   'the advisory and enforced dsh ranges agree'
 )
-for (const release of ['0.2.1-rc.2', '0.2.1-rc.3', '0.2.1-rc.4', '0.2.2-alpha.2']) {
+for (const release of ['0.2.1-rc.2', '0.2.1-rc.3', '0.2.1-rc.4', '0.2.1-rc.5', '0.2.2-alpha.2']) {
   assert.equal(
     manifest.dsh.compatibility.dshReleases[release],
     'compatible',

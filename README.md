@@ -65,11 +65,11 @@ I.Ming 体积约 25 MB（60017 个码位，含 Big5、GB2312、《通用规范�
 
 ## 安装
 
-已发布到 npm：稳定版 [`0.2.1`](https://www.npmjs.com/package/dsh-claude-skin) 对应 DSH 0.2.1-rc.2；预发布版 `0.2.1-rc.4`（dist-tag `next`）适配 **DSH 0.2.1-rc.2 / rc.3 / rc.4 与 0.2.2-alpha.2**，并把字体设置挪到了插件页。推荐直接安装：
+已发布到 npm：稳定版 [`0.2.1`](https://www.npmjs.com/package/dsh-claude-skin) 对应 DSH 0.2.1-rc.2；预发布版 `0.2.1-rc.5`（dist-tag `next`）适配 **DSH 0.2.1-rc.2 / rc.3 / rc.4 / rc.5 与 0.2.2-alpha.2**，并把字体设置挪到了插件页。推荐直接安装：
 
 ```sh
 dsh plugin --profile web add dsh-claude-skin         # 0.2.1（旧版字体设置位置）
-dsh plugin --profile web add dsh-claude-skin@next    # 0.2.1-rc.4，适配 0.2.1-rc.4 / 0.2.2-alpha.2
+dsh plugin --profile web add dsh-claude-skin@next    # 0.2.1-rc.5，适配 0.2.1-rc.5 / 0.2.2-alpha.2
 ```
 
 也可以从源码 / tgz 安装：
@@ -109,9 +109,10 @@ dsh plugin --profile web add github:xiang9916/dsh-claude-skin
 | --- | --- | --- |
 | `0.2.1` | 0.2.1-rc.2 | 字体设置在「设置 → 常规」 |
 | `0.2.1-rc.3` | 0.2.1-rc.3 | 字体设置迁至「插件」面板 |
-| `0.2.1-rc.4`（`next`） | 0.2.1-rc.2 / rc.3 / rc.4 / 0.2.2-alpha.2 | 当前版本 |
+| `0.2.1-rc.4` | 0.2.1-rc.2 / rc.3 / rc.4 / 0.2.2-alpha.2 | 上一版 |
+| `0.2.1-rc.5`（`next`） | 0.2.1-rc.2 / rc.3 / rc.4 / rc.5 / 0.2.2-alpha.2 | 当前版本 |
 
-适配方式：逐版核对客户端插槽契约（`plugins.bundle.config` 的 keyed 注册、`view: 'page'`、按 npm 包名查 ledger）、模块表（`react`、`react/jsx-runtime`、`@deepseek-ai/dsh-client-store`、`@deepseek-ai/dsh-client-ui-primitives`）、`dsh.client.platform === 'web'` 的清单校验、`window.__ModuleLoader__.load({id, factory})` 手写包格式、`data-ds-dark-theme` / `data-slot` / `data-plugin-config` 等 DOM 锚点与皮肤用到的全部类名，以及主题 token：rc.4 的 token 集与 rc.3 完全一致，alpha.2 只删了未被使用的 `--dsw-specific-sidebar-nav-item-hover`，并新增 `--dsw-alias-illustration-*` 等插图 token（本版已改映射为暖中性色）。`package.json` 用 `engines.dsh`（宿主按 `includePrerelease` 参与比较）与 `dsh.compatibility.dshReleases` 声明兼容范围。
+适配方式：逐版核对客户端插槽契约（`plugins.bundle.config` 的 keyed 注册、`view: 'page'`、按 npm 包名查 ledger）、模块表（`react`、`react/jsx-runtime`、`@deepseek-ai/dsh-client-store`、`@deepseek-ai/dsh-client-ui-primitives`）、`dsh.client.platform === 'web'` 的清单校验、`window.__ModuleLoader__.load({id, factory})` 手写包格式、`data-ds-dark-theme` / `data-slot` / `data-plugin-config` 等 DOM 锚点与皮肤用到的全部类名，以及主题 token：rc.5 的五个客户端包（theme / slots / plugin-manager / primitives / store）与 rc.4 逐字节相同，只改了版本号；rc.5 唯一的客户端契约变化是 `conversation.chat.reasoning.body` 增加 `rawText` 并让 `text` 变成处理后文本，本皮肤不注册该槽位、也不给思考区块写样式，因此无需改动。alpha.2 只删了未被使用的 `--dsw-specific-sidebar-nav-item-hover`，并新增 `--dsw-alias-illustration-*` 等插图 token（本版已改映射为暖中性色）。`package.json` 用 `engines.dsh`（宿主按 `includePrerelease` 参与比较）与 `dsh.compatibility.dshReleases` 声明兼容范围。
 
 ## 切换字体
 
