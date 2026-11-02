@@ -147,6 +147,28 @@ assert.equal(
   2,
   'both the light and the dark palette warm the illustration aliases'
 )
+/* Chinese serif: 思源宋体 SemiBold, remapped onto CJK-only unicode ranges */
+for (const face of ['SourceHanSerifSC-SemiBold', 'SourceHanSerifSC-Bold']) {
+  assert.ok(
+    style.textContent.includes(`local("${face}")`),
+    `the CJK faces expose the installed ${face} cut via local()`
+  )
+}
+assert.equal(
+  style.textContent.split('--dsw-font-serif:').length - 1 >= 1,
+  true,
+  'the serif stack is defined for every font mode'
+)
+for (const stack of style.textContent.split('--dsw-font-serif:')) {
+  assert.ok(
+    !stack.slice(0, 400).includes('I.Ming'),
+    'no stack still asks for the retired I.Ming family'
+  )
+}
+assert.ok(
+  style.textContent.includes('"Dsh CJK Serif", "Source Han Serif SC", "思源宋体"'),
+  'the serif stacks fall through to 思源宋体 after the remapped face'
+)
 
 /* ------------------------------------------------------ slot registration */
 

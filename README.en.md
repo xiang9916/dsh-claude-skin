@@ -15,7 +15,7 @@
   - **Skin serif**: keeps the original serif UI style
   - **System default**: leaves DSH fonts untouched
 - Font settings live on the **Claude Flavour Theme** page in the sidebar's **Plugins** panel, not in Settings → General
-- Chinese body text falls through to **I.Ming (一點明體)** — including the new-session hero headline and its preview badge — while Latin stays Anthropic Serif: one run, two scripts
+- Chinese body text uses **思源宋体 / Source Han Serif SC SemiBold** — including the new-session hero headline and its preview badge — while Latin stays Anthropic Serif: one run, two scripts
 - Markdown links, file/command/skill references, file-type icons (including the plan card's MD glyph) and the "Deep diving" status render in clay
 - Code blocks, inline code and menus are warmed up; syntax highlighting uses a Claude palette (clay, olive, amber, lavender)
 - Slim scrollbars, clay selection/focus, pill badges
@@ -30,38 +30,42 @@
 | Anthropic Sans Web Text | UI | [`fonts/AnthropicSansWebText.ttf`](fonts/AnthropicSansWebText.ttf) |
 | Anthropic Serif Web Text | Conversation / Markdown | [`fonts/AnthropicSerifWebText.ttf`](fonts/AnthropicSerifWebText.ttf) |
 | Anthropic Mono Variable | Code / code blocks | [`fonts/AnthropicMonoVariable.ttf`](fonts/AnthropicMonoVariable.ttf) |
-| I.Ming (一點明體) 8.10 | Chinese body / headings / tables / new-session hero headline & preview badge | Not bundled; fetched by [`scripts/install-iming.sh`](scripts/install-iming.sh) |
+| 思源宋体 / Source Han Serif SC 2.003 | Chinese body (SemiBold) / headings / tables / new-session hero headline & preview badge (Bold) | Not bundled; fetched by [`scripts/install-source-han-serif.sh`](scripts/install-source-han-serif.sh) |
 
 Install: on Windows double-click each `.ttf` → **Install**; on macOS import with Font Book. Refresh the page afterwards.
 
 > The Anthropic fonts are proprietary to Anthropic and are provided for personal use only. They are **not** covered by the MIT license (see the font notice in [LICENSE](LICENSE)).
 
-### Chinese body text: I.Ming
+### Chinese body text: 思源宋体 (SemiBold)
+
+> This section is **not on npm yet**: npm still ships the I.Ming build as `0.2.1-rc.5`. To get 思源宋体, pack and install from this repository (`npm pack`, then `dsh plugin --profile web add ./dsh-claude-skin-0.2.1-rc.5.tgz`). Drop this note when the change ships with the next DSH version.
 
 The conversation serif stack is ordered like this:
 
 ```css
 --dsw-font-serif:
   "Anthropic Serif Web Text", Georgia, "Times New Roman",
-  "I.Ming", "一點明體",          /* ← CJK lands here */
-  "Noto Serif SC", "Songti SC", serif;
+  "Dsh CJK Serif",              /* ← han glyphs only: SemiBold / Bold cuts */
+  "Source Han Serif SC", "思源宋体", "Noto Serif SC", "Songti SC", serif;
 ```
 
-Anthropic Serif has no Han glyphs, so **Latin uses Anthropic Serif and Chinese uses I.Ming** — the browser falls back per glyph, no markup changes needed. The `skin` (serif UI) mode resolves to I.Ming as well.
+Anthropic Serif has no Han glyphs, so **Latin uses Anthropic Serif and Chinese uses 思源宋体** — the browser falls back per glyph, no markup changes needed. The `skin` (serif UI) mode resolves to 思源宋体 as well.
 
-Two pieces of the new-session hero would otherwise miss I.Ming: the headline inherits the UI sans stack, and the preview badge is pinned to the mono stack by the app. The skin routes both back to `--dsw-font-serif`, so they turn up in I.Ming under the anthropic and skin modes; the system font mode still leaves the native fonts untouched. Both are also set to `font-weight: 700` — I.Ming ships a Regular cut only, so the browser synthesises the bold face.
+Weight is handled by two `@font-face` rules: `Dsh CJK Serif` references the installed 思源宋体 cuts through `local()` and restricts itself with `unicode-range` to the Han ranges — weight < 600 resolves to the **SemiBold** cut, >= 600 to the **Bold** cut. Chinese body copy therefore gets a real SemiBold, headings no longer need a synthesised bold, and the Latin half of a run is untouched. When the font is missing the `local()` lookup fails and the stack falls through to `Source Han Serif SC` / `思源宋体` / the system Song faces.
 
-I.Ming is ~25 MB (60,017 codepoints; covers Big5, GB2312 and the Table of General Standard Chinese Characters), so it is **not committed** to this repository. The script downloads it from the official release and verifies its SHA-256:
+Two pieces of the new-session hero would otherwise miss the serif stack: the headline inherits the UI sans stack, and the preview badge is pinned to the mono stack by the app. The skin routes both back to `--dsw-font-serif`, so they turn up in 思源宋体 under the anthropic and skin modes; the system font mode still leaves the native fonts untouched. Both are set to `font-weight: 700`, which resolves to the real **Bold** cut.
+
+Source Han Serif SC 2.003 ships seven Simplified-Chinese cuts (~140 MB), so it is **not committed** to this repository. The script downloads the official release archive and verifies its SHA-256:
 
 ```sh
-./scripts/install-iming.sh
+./scripts/install-source-han-serif.sh
 ```
 
-- macOS → `~/Library/Fonts/I.Ming-8.10.ttf`; Linux → `~/.local/share/fonts/` (runs `fc-cache`)
-- Windows: the script prints the download URL; double-click the `.ttf` → **Install**
-- Verify on macOS: `system_profiler SPFontsDataType | grep I.Ming`
+- macOS → `~/Library/Fonts/SourceHanSerifSC-*.otf`; Linux → `~/.local/share/fonts/` (runs `fc-cache`)
+- Windows: the script prints the download URL; unzip, select the `.otf` files → **Install**
+- Verify on macOS: `system_profiler SPFontsDataType | grep 思源宋体`
 
-> I.Ming is made by the I.Font Project and licensed under the [IPA Font License 1.0](https://github.com/ichitenfont/I.Ming/blob/master/8.10/IPA_Font_License_Agreement_v1.0.md), **not** MIT. This repository only references the family name and does not redistribute the font.
+> 思源宋体 is made by Adobe and licensed under the [SIL Open Font License 1.1](https://github.com/adobe-fonts/source-han-serif/blob/master/LICENSE.txt), **not** MIT. This repository only references the family name and does not redistribute the font.
 
 ## Install
 
@@ -101,7 +105,7 @@ Restart `dsh web`, then refresh the page.
 
 > **Plugin list name and icon**: the plugin appears in the Plugins page's Installed list as **“Claude Flavour Theme”** (中文环境显示「Claude 风味主题」) with a terracotta whale icon. The title comes from `meta.title` in [`locale/en.json`](locale/en.json) / [`locale/zh.json`](locale/zh.json); the icon is declared by `"icon": "./icon.svg"` in [`package.json`](package.json).
 
-> **Seeing no Anthropic fonts after install is expected**: the npm package does not ship font files. Import the three TTFs from [`fonts/`](fonts/) manually; for Chinese body text in I.Ming, also run `./scripts/install-iming.sh`.
+> **Seeing no Anthropic fonts after install is expected**: the npm package does not ship font files. Import the three TTFs from [`fonts/`](fonts/) manually; for Chinese body text in 思源宋体 SemiBold, also run `./scripts/install-source-han-serif.sh`.
 
 ## Compatibility
 
@@ -118,8 +122,8 @@ How it was audited: the client slot contract (`plugins.bundle.config` keyed regi
 
 Open the sidebar's **Plugins** panel → Installed plugins → **Claude Flavour Theme**, then find **Font style** in its configuration section:
 
-- **Anthropic native (default)**: Sans UI / Serif body (I.Ming for Chinese) / Mono code
-- **Skin serif**: Georgia-style serif UI, I.Ming for Chinese
+- **Anthropic native (default)**: Sans UI / Serif body (思源宋体 SemiBold for Chinese) / Mono code
+- **Skin serif**: Georgia-style serif UI, 思源宋体 SemiBold for Chinese
 - **System default**: keep DSH's default fonts
 
 The selection applies instantly and is saved in browser localStorage. Settings → General no longer shows this row.
@@ -149,4 +153,4 @@ Edit `~/.dsh/cordis.patch.yml`:
 
 ## License
 
-MIT. Upstream copyright and author credits are retained in [LICENSE](LICENSE); the Anthropic fonts remain copyright Anthropic and I.Ming is under the IPA Font License 1.0 — neither is covered by MIT.
+MIT. Upstream copyright and author credits are retained in [LICENSE](LICENSE); the Anthropic fonts remain copyright Anthropic and 思源宋体 is under the SIL Open Font License 1.1 — neither is covered by MIT.

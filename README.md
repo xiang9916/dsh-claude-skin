@@ -15,7 +15,7 @@
   - **皮肤衬线**：保留原来的衬线 UI 风格
   - **系统默认**：不覆盖 DSH 字体
 - 字体设置位于侧栏 **插件** → **Claude 风味主题** 页面，不再占用 设置 → 常规
-- 中文正文自动落到 **I.Ming（一點明體）**（含新对话空态的「探索未至之境」标题与「预览版」徽章），西文仍是 Anthropic Serif，中英混排各用其长
+- 中文正文自动用到 **思源宋体 SemiBold**（含新对话空态的「探索未至之境」标题与「预览版」徽章），西文仍是 Anthropic Serif，中英混排各用其长
 - 正文链接、文件 / 命令 / 技能引用、文件类型图标（含计划卡 MD 图标）与「深度求索中」状态统一为陶橙
 - 代码块、行内代码、菜单等冷灰面暖色化；语法高亮使用 Claude 语法色（陶橙 / 橄榄 / 琥珀 / 薰衣草）
 - 细滚动条、陶橙选中 / 焦点、胶囊徽章
@@ -30,38 +30,42 @@
 | Anthropic Sans Web Text | 界面 / UI | [`fonts/AnthropicSansWebText.ttf`](fonts/AnthropicSansWebText.ttf) |
 | Anthropic Serif Web Text | 对话正文 / Markdown | [`fonts/AnthropicSerifWebText.ttf`](fonts/AnthropicSerifWebText.ttf) |
 | Anthropic Mono Variable | 代码 / 代码块 | [`fonts/AnthropicMonoVariable.ttf`](fonts/AnthropicMonoVariable.ttf) |
-| I.Ming（一點明體）8.10 | 中文正文 / 标题 / 表格 / 新对话空态标题与「预览版」徽章 | 不随仓库分发，用 [`scripts/install-iming.sh`](scripts/install-iming.sh) 下载安装 |
+| 思源宋体 / Source Han Serif SC 2.003 | 中文正文（SemiBold）/ 标题 / 表格 / 新对话空态标题与「预览版」徽章（Bold） | 不随仓库分发，用 [`scripts/install-source-han-serif.sh`](scripts/install-source-han-serif.sh) 下载安装 |
 
 安装：Windows 双击 `.ttf` → 「安装」；macOS 用「字体册」导入。安装后刷新页面生效。
 
 > 字体版权归 Anthropic 所有，仅供个人使用，不适用 MIT 许可（详见 [LICENSE](LICENSE) 字体声明）。
 
-### 中文正文：一點明體（I.Ming）
+### 中文正文：思源宋体（SemiBold 字重）
+
+> 这一节的改动**尚未发布到 npm**：npm 上的 `0.2.1-rc.5` 仍是 I.Ming 版，想用思源宋体需要从本仓库打包安装（`npm pack` 后用 `dsh plugin --profile web add ./dsh-claude-skin-0.2.1-rc.5.tgz`）。下次随 DSH 版本一起发布时把这段提示删掉。
 
 对话正文的衬线字族是这样排列的：
 
 ```css
 --dsw-font-serif:
   "Anthropic Serif Web Text", Georgia, "Times New Roman",
-  "I.Ming", "一點明體",          /* ← 中文落到这里 */
-  "Noto Serif SC", "Songti SC", serif;
+  "Dsh CJK Serif",              /* ← 只接管汉字区段：SemiBold / Bold 两个切面 */
+  "Source Han Serif SC", "思源宋体", "Noto Serif SC", "Songti SC", serif;
 ```
 
-Anthropic Serif 不含汉字，所以**西文用 Anthropic Serif、汉字用 I.Ming**，浏览器按字形逐个回退，无需拆段。`skin`（皮肤衬线）模式同样会落到 I.Ming。
+Anthropic Serif 不含汉字，所以**西文用 Anthropic Serif、汉字用思源宋体**，浏览器按字形逐个回退，无需拆段。`skin`（皮肤衬线）模式同样会落到思源宋体。
 
-新对话空态的两处文字原本到不了 I.Ming：「探索未至之境」大标题继承的是 UI 无衬线字族，「预览版」徽章则被应用钉在等宽字族。皮肤用一条规则把两者指回 `--dsw-font-serif`，因此 anthropic / skin 模式下它们与正文一样是明体；「系统默认」模式则保持不干预字体。这两处同时按 `font-weight: 700` 加粗，明体只有常规字重，粗体由浏览器合成。
+字重由两条 `@font-face` 控制：`Dsh CJK Serif` 用 `local()` 引用系统里已安装的思源宋体切面，并用 `unicode-range` 只覆盖汉字区段 —— 字重 < 600 走 **SemiBold** 切面，≥ 600 走 **Bold** 切面。这样正文汉字是真正的 SemiBold，标题不必再靠浏览器合成粗体，西文部分也完全不受影响；没装字体时 `local()` 失配，字族继续回退到 `Source Han Serif SC` / `思源宋体` / 系统宋体。
 
-I.Ming 体积约 25 MB（60017 个码位，含 Big5、GB2312、《通用规范汉字表》），故**不提交进仓库**，改用脚本从官方 Release 下载并校验 SHA-256：
+新对话空态的两处文字原本到不了衬线字族：「探索未至之境」大标题继承的是 UI 无衬线字族，「预览版」徽章则被应用钉在等宽字族。皮肤用一条规则把两者指回 `--dsw-font-serif`，因此 anthropic / skin 模式下它们与正文一样是思源宋体；「系统默认」模式则保持不干预字体。这两处按 `font-weight: 700` 取思源宋体的 **Bold** 切面，是真实字重而非合成加粗。
+
+思源宋体 2.003 的简体中文七个字重约 140 MB，故**不提交进仓库**，改用脚本从官方 Release 下载并校验 SHA-256：
 
 ```sh
-./scripts/install-iming.sh
+./scripts/install-source-han-serif.sh
 ```
 
-- macOS → `~/Library/Fonts/I.Ming-8.10.ttf`；Linux → `~/.local/share/fonts/`（自动 `fc-cache`）
-- Windows：脚本只提示下载地址，双击 `.ttf` → 「安装」即可
-- 验证：macOS 里 `system_profiler SPFontsDataType | grep I.Ming` 应能查到
+- macOS → `~/Library/Fonts/SourceHanSerifSC-*.otf`；Linux → `~/.local/share/fonts/`（自动 `fc-cache`）
+- Windows：脚本只提示下载地址，解压后全选 `.otf` → 右键「安装」即可
+- 验证：macOS 里 `system_profiler SPFontsDataType | grep 思源宋体` 应能查到
 
-> I.Ming 由一點字坊（I.Font Project）制作，采用 [IPA 开放字型授权协议 1.0](https://github.com/ichitenfont/I.Ming/blob/master/8.10/IPA_Font_License_Agreement_v1.0_chi.md)，**不适用 MIT**；本仓库只引用字体名、不分发字体文件。
+> 思源宋体由 Adobe 制作，采用 [SIL 开放字体授权协议 1.1（OFL）](https://github.com/adobe-fonts/source-han-serif/blob/master/LICENSE.txt)，**不适用 MIT**；本仓库只引用字体名、不分发字体文件。
 
 ## 安装
 
@@ -101,7 +105,7 @@ dsh plugin --profile web add github:xiang9916/dsh-claude-skin
 
 > **插件列表显示名与图标**：安装后在插件页的「已安装插件」里显示为 **「Claude 风味主题」**，图标是陶土橙鲸鱼。名称来自 [`locale/zh.json`](locale/zh.json) 的 `meta.title`，英文环境显示 `Claude Flavour Theme`；图标由 [`package.json`](package.json) 的 `"icon": "./icon.svg"` 指向 [`icon.svg`](icon.svg)。
 
-> **装完看不到 Anthropic 字体是正常的**：npm 包不随包分发字体，需要手动导入 [`fonts/`](fonts/) 里的三个 TTF；想让中文正文用一點明體，再执行一次 `./scripts/install-iming.sh`。
+> **装完看不到 Anthropic 字体是正常的**：npm 包不随包分发字体，需要手动导入 [`fonts/`](fonts/) 里的三个 TTF；想让中文正文用思源宋体 SemiBold，再执行一次 `./scripts/install-source-han-serif.sh`。
 
 ## 兼容性
 
@@ -118,8 +122,8 @@ dsh plugin --profile web add github:xiang9916/dsh-claude-skin
 
 打开侧栏 **插件** → 已安装插件 → **Claude 风味主题**，在配置区找到 **字体风格**：
 
-- **Anthropic 原生（默认）**：Sans UI / Serif 正文（汉字 I.Ming）/ Mono 代码
-- **皮肤衬线**：Georgia 等衬线 UI，汉字同样用 I.Ming
+- **Anthropic 原生（默认）**：Sans UI / Serif 正文（汉字思源宋体 SemiBold）/ Mono 代码
+- **皮肤衬线**：Georgia 等衬线 UI，汉字同样用思源宋体 SemiBold
 - **系统默认**：保持 DSH 默认字体
 
 选择立即生效，并保存在浏览器 localStorage。设置 → 常规 不再显示这一行。
@@ -149,4 +153,4 @@ dsh plugin --profile web add github:xiang9916/dsh-claude-skin
 
 ## 许可
 
-MIT。上游版权与作者署名保留在 [LICENSE](LICENSE) 中；Anthropic 字体版权归 Anthropic，I.Ming 采用 IPA 开放字型授权协议 1.0，均不适用 MIT。
+MIT。上游版权与作者署名保留在 [LICENSE](LICENSE) 中；Anthropic 字体版权归 Anthropic，思源宋体采用 SIL 开放字体授权协议 1.1，均不适用 MIT。
