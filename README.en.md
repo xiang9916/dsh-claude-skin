@@ -38,8 +38,6 @@ Install: on Windows double-click each `.ttf` → **Install**; on macOS import wi
 
 ### Chinese body text: 思源宋体 (SemiBold)
 
-> This section is **not on npm yet**: npm still ships the I.Ming build as `0.2.1-rc.5`. To get 思源宋体, pack and install from this repository (`npm pack`, then `dsh plugin --profile web add ./dsh-claude-skin-0.2.1-rc.5.tgz`). Drop this note when the change ships with the next DSH version.
-
 The conversation serif stack is ordered like this:
 
 ```css
@@ -69,11 +67,11 @@ Source Han Serif SC 2.003 ships seven Simplified-Chinese cuts (~140 MB), so it i
 
 ## Install
 
-Published on npm: the stable [`0.2.1`](https://www.npmjs.com/package/dsh-claude-skin) targets DSH 0.2.1-rc.2; the prerelease `0.2.1-rc.5` (dist-tag `next`) supports **DSH 0.2.1-rc.2 / rc.3 / rc.4 / rc.5 and 0.2.2-alpha.2** and moves the font setting onto the Plugins page. The shortest path:
+Published on npm: the stable [`0.2.1`](https://www.npmjs.com/package/dsh-claude-skin) targets DSH 0.2.1-rc.2; the prerelease `0.2.2-rc.1` (dist-tag `next`) supports **DSH 0.2.1-rc.2 / rc.3 / rc.4 / rc.5, 0.2.2-alpha.2 and 0.2.2-rc.1**, keeps the font setting on the Plugins page and draws Chinese serif text in Source Han Serif (思源宋体). The shortest path:
 
 ```sh
 dsh plugin --profile web add dsh-claude-skin         # 0.2.1 (old font-setting location)
-dsh plugin --profile web add dsh-claude-skin@next    # 0.2.1-rc.5, for 0.2.1-rc.5 / 0.2.2-alpha.2
+dsh plugin --profile web add dsh-claude-skin@next    # 0.2.2-rc.1, for 0.2.2-rc.1 / 0.2.1-rc.5 / 0.2.2-alpha.2
 ```
 
 Installing from source or a tgz also works:
@@ -113,10 +111,11 @@ Restart `dsh web`, then refresh the page.
 | --- | --- | --- |
 | `0.2.1` | 0.2.1-rc.2 | font setting lives in Settings → General |
 | `0.2.1-rc.3` | 0.2.1-rc.3 | font setting moved to the Plugins panel |
-| `0.2.1-rc.4` | 0.2.1-rc.2 / rc.3 / rc.4 / 0.2.2-alpha.2 | previous release |
-| `0.2.1-rc.5` (`next`) | 0.2.1-rc.2 / rc.3 / rc.4 / rc.5 / 0.2.2-alpha.2 | current release |
+| `0.2.1-rc.4` | 0.2.1-rc.2 / rc.3 / rc.4 / 0.2.2-alpha.2 | older release |
+| `0.2.1-rc.5` | 0.2.1-rc.2 / rc.3 / rc.4 / rc.5 / 0.2.2-alpha.2 | last I.Ming build |
+| `0.2.2-rc.1` (`next`) | 0.2.1-rc.2 / rc.3 / rc.4 / rc.5 / 0.2.2-alpha.2 / 0.2.2-rc.1 | current release |
 
-How it was audited: the client slot contract (`plugins.bundle.config` keyed registration, `view: 'page'`, ledger lookup by npm package name), the module table (`react`, `react/jsx-runtime`, `@deepseek-ai/dsh-client-store`, `@deepseek-ai/dsh-client-ui-primitives`), the `dsh.client.platform === 'web'` manifest check, the handwritten `window.__ModuleLoader__.load({id, factory})` bundle format, the `data-ds-dark-theme` / `data-slot` / `data-plugin-config` DOM anchors and every class name the skin targets, plus the theme tokens: rc.5's five client packages (theme / slots / plugin-manager / primitives / store) are byte-identical to rc.4 apart from the version field. The one client-side contract change in rc.5 is `conversation.chat.reasoning.body` gaining `rawText` while `text` becomes the display-processed string; this skin does not register that slot and writes no reasoning styles, so nothing had to change. alpha.2 only drops the unused `--dsw-specific-sidebar-nav-item-hover` and adds the `--dsw-alias-illustration-*` family (remapped to warm neutrals here). `package.json` declares the range through `engines.dsh` (the host compares with `includePrerelease`) and `dsh.compatibility.dshReleases`.
+How it was audited: the client slot contract (`plugins.bundle.config` keyed registration, `view: 'page'`, ledger lookup by npm package name), the module table (`react`, `react/jsx-runtime`, `@deepseek-ai/dsh-client-store`, `@deepseek-ai/dsh-client-ui-primitives`), the `dsh.client.platform === 'web'` manifest check, the handwritten `window.__ModuleLoader__.load({id, factory})` bundle format, the `data-ds-dark-theme` / `data-slot` / `data-plugin-config` DOM anchors and every class name the skin targets, plus the theme tokens: rc.5's five client packages (theme / slots / plugin-manager / primitives / store) are byte-identical to rc.4 apart from the version field. The one client-side contract change in rc.5 is `conversation.chat.reasoning.body` gaining `rawText` while `text` becomes the display-processed string; this skin does not register that slot and writes no reasoning styles, so nothing had to change. alpha.2 only drops the unused `--dsw-specific-sidebar-nav-item-hover` and adds the `--dsw-alias-illustration-*` family (remapped to warm neutrals here). 0.2.2-rc.1 is a host-side release: `ui-slots`' `lib/` is byte-identical to rc.5, `plugins.bundle.config` is still a keyed root slot rendered with `view: 'page'` inside the `[data-plugin-config]` section, and although the plugin detail page gained rich-text rendering and a `BundleDetailSection`, the configuration section's position and `entryKey` argument are unchanged. The token set grew from 405 to 416: the only removal is the unused sidebar hover token, while `--dsw-alias-illustration-*`, `--dsw-alias-state-done-primary`, `--dsw-static-neutral-bluish-*` and `--dsw-static-violet-*` are new. Dark mode is still driven by `data-ds-dark-theme` on `document.body`; every class anchor the skin targets (`sidebarCol`, `centerCol`, `titleGroup`, `previewBadge`, `fishHitbox`, `brandName`, `brandMark`, `newSession`, `sectionLabel`) still resolves, and the mobile/tablet layouts plus dark mode were spot-checked with no regressions. The `>=0.2.1-rc.2 <0.3.0-0` range is evaluated by the host with `semver.satisfies(..., { includePrerelease: true })`, so 0.2.2-rc.1 already satisfies it. `package.json` declares the range through `engines.dsh` (the host compares with `includePrerelease`) and `dsh.compatibility.dshReleases`.
 
 ## Switching fonts
 
