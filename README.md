@@ -67,11 +67,11 @@ Anthropic Serif 不含汉字，所以**西文用 Anthropic Serif、汉字用思�
 
 ## 安装
 
-已发布到 npm：稳定版 [`0.2.1`](https://www.npmjs.com/package/dsh-claude-skin) 对应 DSH 0.2.1-rc.2；预发布版 `0.2.2-rc.1`（dist-tag `next`）适配 **DSH 0.2.1-rc.2 / rc.3 / rc.4 / rc.5 与 0.2.2-alpha.2 / 0.2.2-rc.1**，字体设置位于插件页，中文衬线用思源宋体。推荐直接安装：
+已发布到 npm：稳定版 [`0.2.1`](https://www.npmjs.com/package/dsh-claude-skin) 对应 DSH 0.2.1-rc.2；预发布版 `0.2.2-rc.4`（dist-tag `next`）适配 **DSH 0.2.1-rc.2 / rc.3 / rc.4 / rc.5 与 0.2.2-alpha.2 / 0.2.2-rc.1 / rc.2 / rc.3 / rc.4**，字体设置位于插件页，中文衬线用思源宋体。推荐直接安装：
 
 ```sh
 dsh plugin --profile web add dsh-claude-skin         # 0.2.1（旧版字体设置位置）
-dsh plugin --profile web add dsh-claude-skin@next    # 0.2.2-rc.1，适配 0.2.2-rc.1 / 0.2.1-rc.5 / 0.2.2-alpha.2
+dsh plugin --profile web add dsh-claude-skin@next    # 0.2.2-rc.4，适配 0.2.2-rc.4 / rc.3 / rc.2 / rc.1
 ```
 
 也可以从源码 / tgz 安装：
@@ -113,9 +113,10 @@ dsh plugin --profile web add github:xiang9916/dsh-claude-skin
 | `0.2.1-rc.3` | 0.2.1-rc.3 | 字体设置迁至「插件」面板 |
 | `0.2.1-rc.4` | 0.2.1-rc.2 / rc.3 / rc.4 / 0.2.2-alpha.2 | 旧版 |
 | `0.2.1-rc.5` | 0.2.1-rc.2 / rc.3 / rc.4 / rc.5 / 0.2.2-alpha.2 | 中文衬线改用思源宋体之前的一版 |
-| `0.2.2-rc.1`（`next`） | 0.2.1-rc.2 / rc.3 / rc.4 / rc.5 / 0.2.2-alpha.2 / 0.2.2-rc.1 | 当前版本 |
+| `0.2.2-rc.1` | 0.2.1-rc.2 / rc.3 / rc.4 / rc.5 / 0.2.2-alpha.2 / 0.2.2-rc.1 | 上一版 |
+| `0.2.2-rc.4`（`next`） | 0.2.1-rc.2 / rc.3 / rc.4 / rc.5 / 0.2.2-alpha.2 / 0.2.2-rc.1 / rc.2 / rc.3 / rc.4 | 当前版本 |
 
-适配方式：逐版核对客户端插槽契约（`plugins.bundle.config` 的 keyed 注册、`view: 'page'`、按 npm 包名查 ledger）、模块表（`react`、`react/jsx-runtime`、`@deepseek-ai/dsh-client-store`、`@deepseek-ai/dsh-client-ui-primitives`）、`dsh.client.platform === 'web'` 的清单校验、`window.__ModuleLoader__.load({id, factory})` 手写包格式、`data-ds-dark-theme` / `data-slot` / `data-plugin-config` 等 DOM 锚点与皮肤用到的全部类名，以及主题 token：rc.5 的五个客户端包（theme / slots / plugin-manager / primitives / store）与 rc.4 逐字节相同，只改了版本号；rc.5 唯一的客户端契约变化是 `conversation.chat.reasoning.body` 增加 `rawText` 并让 `text` 变成处理后文本，本皮肤不注册该槽位、也不给思考区块写样式，因此无需改动。alpha.2 只删了未被使用的 `--dsw-specific-sidebar-nav-item-hover`，并新增 `--dsw-alias-illustration-*` 等插图 token（本版已改映射为暖中性色）。0.2.2-rc.1 这次改动集中在宿主侧：`ui-slots` 包的 `lib/` 与 rc.5 逐字节相同，`plugins.bundle.config` 仍是 keyed 根插槽、仍在 `[data-plugin-config]` 区块内以 `view: 'page'` 渲染，插件详情页新增富文本说明与 `BundleDetailSection`，但配置区位置与 `entryKey` 传参未变；主题 token 从 405 个增至 416 个，只删掉本皮肤未使用的 sidebar hover token，新增 `--dsw-alias-illustration-*`、`--dsw-alias-state-done-primary`、`--dsw-static-neutral-bluish-*`、`--dsw-static-violet-*`；暗色仍由 `document.body` 上的 `data-ds-dark-theme` 驱动；侧栏/主区类名锚点（`sidebarCol`、`centerCol`、`titleGroup`、`previewBadge`、`fishHitbox`、`brandName`、`brandMark`、`newSession`、`sectionLabel`）全部命中，手机/平板窄屏布局与暗色实测无回归。`engines.dsh` 的 `>=0.2.1-rc.2 <0.3.0-0` 在宿主侧用 `semver.satisfies(..., { includePrerelease: true })` 比较，0.2.2-rc.1 落在区间内，无需放宽。`package.json` 用 `engines.dsh`（宿主按 `includePrerelease` 参与比较）与 `dsh.compatibility.dshReleases` 声明兼容范围。
+适配方式：逐版核对客户端插槽契约（`plugins.bundle.config` 的 keyed 注册、`view: 'page'`、按 npm 包名查 ledger）、模块表（`react`、`react/jsx-runtime`、`@deepseek-ai/dsh-client-store`、`@deepseek-ai/dsh-client-ui-primitives`）、`dsh.client.platform === 'web'` 的清单校验、`window.__ModuleLoader__.load({id, factory})` 手写包格式、`data-ds-dark-theme` / `data-slot` / `data-plugin-config` 等 DOM 锚点与皮肤用到的全部类名，以及主题 token：rc.5 的五个客户端包（theme / slots / plugin-manager / primitives / store）与 rc.4 逐字节相同，只改了版本号；rc.5 唯一的客户端契约变化是 `conversation.chat.reasoning.body` 增加 `rawText` 并让 `text` 变成处理后文本，本皮肤不注册该槽位、也不给思考区块写样式，因此无需改动。alpha.2 只删了未被使用的 `--dsw-specific-sidebar-nav-item-hover`，并新增 `--dsw-alias-illustration-*` 等插图 token（本版已改映射为暖中性色）。0.2.2-rc.1 这次改动集中在宿主侧：`ui-slots` 包的 `lib/` 与 rc.5 逐字节相同，`plugins.bundle.config` 仍是 keyed 根插槽、仍在 `[data-plugin-config]` 区块内以 `view: 'page'` 渲染，插件详情页新增富文本说明与 `BundleDetailSection`，但配置区位置与 `entryKey` 传参未变；主题 token 从 405 个增至 416 个，只删掉本皮肤未使用的 sidebar hover token，新增 `--dsw-alias-illustration-*`、`--dsw-alias-state-done-primary`、`--dsw-static-neutral-bluish-*`、`--dsw-static-violet-*`；暗色仍由 `document.body` 上的 `data-ds-dark-theme` 驱动；侧栏/主区类名锚点（`sidebarCol`、`centerCol`、`titleGroup`、`previewBadge`、`fishHitbox`、`brandName`、`brandMark`、`newSession`、`sectionLabel`）全部命中，手机/平板窄屏布局与暗色实测无回归。`engines.dsh` 的 `>=0.2.1-rc.2 <0.3.0-0` 在宿主侧用 `semver.satisfies(..., { includePrerelease: true })` 比较，0.2.2-rc.1 落在区间内，无需放宽。0.2.2-rc.2 起有两处与本皮肤相关的宿主改动：一是 Client 产物的 CSS Modules 类名从 `_<local>_<hash>` 改成 `<hash>_<local>`，本皮肤全部用 `[class*="sidebarCol"]` 这类子串选择器（不含尾部下划线），改动前后都命中；二是新增 `hoc` 插槽类型（包裹层），`plugins.bundle.config` 仍是 `{kind: 'keyed', scope: 'root'}`，写法不变。0.2.2-rc.3 删除了「设置 → 内置插件」两个包与 `settings.plugins.tab` 插槽，本皮肤用的是插件页的 `plugins.bundle.config`，不受影响。0.2.2-rc.4 的主题 token 从 rc.1 的 414 个增至 450 个，新增 hovercard / json-tree / card-fill / chart / toast / sidebar-glass 等 36 个 token，**没有删除任何 token**；暗色仍由 `body[data-ds-dark-theme]` 驱动，类名锚点（`sidebarCol`、`centerCol`、`titleGroup`、`previewBadge`、`fishHitbox`、`brandName`、`brandMark`、`newSession`、`sectionLabel`、`brandIdentity`）在 rc.4 的构建产物里全部命中，浅色/暗色与手机窄屏实测无回归。`package.json` 用 `engines.dsh`（宿主按 `includePrerelease` 参与比较）与 `dsh.compatibility.dshReleases` 声明兼容范围。
 
 ## 切换字体
 
